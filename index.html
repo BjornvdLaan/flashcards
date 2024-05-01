@@ -9,7 +9,6 @@
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
             height: 100vh;
             margin: 0;
             background-color: #f9f9f9;
@@ -17,14 +16,16 @@
 
         .container {
             text-align: center;
-            padding: 20px;
+            padding: 10px;
+            margin-top: 10px;
+            max-width: 90%;
         }
 
         .flashcard {
-            width: 200px;
-            height: 300px;
+            width: 100%;
+            height: 150px;
             perspective: 1000px;
-            margin: 0 auto 20px;
+            margin: 10px auto 20px;
         }
 
         .card-front, .card-back {
@@ -48,11 +49,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
             transform: rotateY(180deg);
         }
 
         button {
-            margin-top: 10px;
+            margin-top: 5px;
             padding: 10px 20px;
             border: none;
             background-color: #007bff;
@@ -66,21 +68,36 @@
             background-color: #0056b3;
         }
 
-        #feedbackText {
-            margin-top: 10px;
-            font-size: 16px;
-            color: #333;
+        #inputField {
+            width: calc(100% - 40px);
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: border-color 0.3s ease;
         }
 
-        @media only screen and (max-width: 600px) {
-            .flashcard {
-                width: 80%;
+        #inputField.correct {
+            border-color: green;
+        }
+
+        #inputField.incorrect {
+            border-color: red;
+        }
+
+        @media only screen and (min-width: 600px) {
+            .container {
+                max-width: 400px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <input type="text" id="inputField" placeholder="Type your answer">
+        <br>
+        <button id="flipBtn">Flip</button>
+        <button id="checkBtn">Check Answer</button>
         <div class="flashcard">
             <div class="card-front">
                 <p>Study</p>
@@ -90,12 +107,7 @@
                 <p>功课</p>
             </div>
         </div>
-        <input type="text" id="inputField" placeholder="Type your answer">
-        <br>
-        <button id="flipBtn">Flip</button>
-        <button id="checkBtn">Check Answer</button>
         <button id="nextBtn">Next</button>
-        <p id="feedbackText"></p>
     </div>
 
     <script>
@@ -104,7 +116,6 @@
         const card = document.querySelector('.flashcard');
         const inputField = document.getElementById('inputField');
         const checkBtn = document.getElementById('checkBtn');
-        const feedbackText = document.getElementById('feedbackText');
 
         const flashcardContents = [
             { front: "Study", back: ["gōngkè", "功课"] },
@@ -154,9 +165,11 @@
             const currentCard = flashcardContents[currentCardIndex];
             const userInput = inputField.value.trim();
             if (userInput.toLowerCase() === currentCard.back[0].toLowerCase() || userInput.toLowerCase() === currentCard.back[1].toLowerCase()) {
-                feedbackText.textContent = "Correct!";
+                inputField.classList.remove('incorrect');
+                inputField.classList.add('correct');
             } else {
-                feedbackText.textContent = "Incorrect. Try again.";
+                inputField.classList.remove('correct');
+                inputField.classList.add('incorrect');
             }
         });
 
@@ -166,9 +179,10 @@
                 currentCardIndex = 0;
             }
             card.classList.remove('flipped');
+            inputField.classList.remove('correct');
+            inputField.classList.remove('incorrect');
             displayCard();
             inputField.value = '';
-            feedbackText.textContent = '';
             if (card.classList.contains('flipped')) {
                 card.classList.remove('flipped');
             }
