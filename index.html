@@ -7,7 +7,6 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 17px;
             display: flex;
             justify-content: center;
             height: 100vh;
@@ -54,8 +53,13 @@
             transform: rotateY(180deg);
         }
 
+        .card-front > p, .card-back > p {
+            font-size: 22px;
+        }
+
         button {
             margin-top: 5px;
+            font-size: 16px;
             padding: 15px 20px;
             border: none;
             background-color: #007bff;
@@ -71,6 +75,7 @@
 
         #inputField {
             width: calc(100% - 40px);
+            font-size: 18px;
             padding: 10px;
             border: 2px solid #ccc;
             border-radius: 5px;
@@ -79,18 +84,18 @@
         }
 
         #inputField.correct, #inputField:focus.correct, #feedback-text.correct {
+            color: green;
             border-color: green;
-            border-color: lightgreen;
         }
 
         #inputField.incorrect, #inputField:focus.incorrect, #feedback-text.incorrect {
+            color: red;
             border-color: red;
-            background-color: lightcoral;
         }
 
         #inputField.correct-without-tones, #inputField:focus.correct-without-tones, #feedback-text.correct-without-tones {
+            color: orange;
             border-color: orange;
-            background-color: lightgoldenrodyellow;
         }
 
         @media only screen and (max-width: 600px) {
@@ -171,6 +176,10 @@
             }
         }
 
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+
         function removeTones(word) {
             return word.replace(/[āáǎàēéěèīíǐìōóǒòūúǔùü]/g, match => {
                 switch (match) {
@@ -233,20 +242,13 @@
         });
 
         nextBtn.addEventListener('click', function() {
-            currentCardIndex++;
-            if (currentCardIndex === flashcardContents.length) {
-                currentCardIndex = 0;
-            }
+            currentCardIndex = getRandomInt(flashcardContents.length);
+ 
             card.classList.remove('flipped');
-
             inputField.classList.remove('correct', 'correct-without-tones', 'incorrect');
             feedbackText.classList.remove('correct', 'correct-without-tones', 'incorrect');
             feedbackText.textContent = "";
-
-            inputField.value = '';
-            if (card.classList.contains('flipped')) {
-                card.classList.remove('flipped');
-            }
+            inputField.value = "";
 
             displayCard();
         });
