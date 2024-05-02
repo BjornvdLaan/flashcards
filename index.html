@@ -196,7 +196,7 @@
             { front: "Beijing opera", back: ["jīngjù", "京剧"] }
         ];
 
-        let currentCardIndex = 0;
+        let currentCardIndex = getRandomInt(flashcardContents.length);
 
         function displayCard() {
             const currentCard = flashcardContents[currentCardIndex];
