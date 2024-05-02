@@ -78,12 +78,19 @@
             transition: border-color 0.3s ease;
         }
 
-        #inputField.correct {
+        #inputField.correct, #inputField:focus.correct, #feedback-text.correct {
             border-color: green;
+            border-color: lightgreen;
         }
 
-        #inputField.incorrect {
+        #inputField.incorrect, #inputField:focus.incorrect, #feedback-text.incorrect {
             border-color: red;
+            background-color: lightcoral;
+        }
+
+        #inputField.correct-without-tones, #inputField:focus.correct-without-tones, #feedback-text.correct-without-tones {
+            border-color: orange;
+            background-color: lightgoldenrodyellow;
         }
 
         @media only screen and (max-width: 600px) {
@@ -111,6 +118,10 @@
         <button id="flipBtn">Flip</button>
         <button id="checkBtn">Check Answer</button>
         <button id="nextBtn">Next</button>
+        <br>
+        <div class="feedback-box">
+            <p id="feedback-text"></p>
+        </div>
     </div>
 
     <script>
@@ -119,6 +130,7 @@
         const card = document.querySelector('.flashcard');
         const inputField = document.getElementById('inputField');
         const checkBtn = document.getElementById('checkBtn');
+        const feedbackText = document.getElementById('feedback-text');
 
         const flashcardContents = [
             { front: "Study", back: ["gōngkè", "功课"] },
@@ -159,21 +171,65 @@
             }
         }
 
+        function removeTones(word) {
+            return word.replace(/[āáǎàēéěèīíǐìōóǒòūúǔùü]/g, match => {
+                switch (match) {
+                    case 'ā': return 'a';
+                    case 'á': return 'a';
+                    case 'ǎ': return 'a';
+                    case 'à': return 'a';
+                    case 'ē': return 'e';
+                    case 'é': return 'e';
+                    case 'ě': return 'e';
+                    case 'è': return 'e';
+                    case 'ī': return 'i';
+                    case 'í': return 'i';
+                    case 'ǐ': return 'i';
+                    case 'ì': return 'i';
+                    case 'ō': return 'o';
+                    case 'ó': return 'o';
+                    case 'ǒ': return 'o';
+                    case 'ò': return 'o';
+                    case 'ū': return 'u';
+                    case 'ú': return 'u';
+                    case 'ǔ': return 'u';
+                    case 'ù': return 'u';
+                    case 'ü': return 'u';
+                    default: return match;
+                }
+            });
+        }
+
+        function checkAnswer() {
+            const currentCard = flashcardContents[currentCardIndex];
+            const userInput = inputField.value.trim();
+            const userInputWithoutTones = removeTones(userInput);
+
+            inputField.classList.remove('correct', 'correct-without-tones', 'incorrect');
+            feedbackText.classList.remove('correct', 'correct-without-tones', 'incorrect');
+            
+            if (userInput.toLowerCase() === currentCard.back[0].toLowerCase() || userInput.toLowerCase() === currentCard.back[1].toLowerCase()) {
+                inputField.classList.add('correct');
+                feedbackText.classList.add('correct');
+                feedbackText.textContent = "Correct!";
+            } else if (userInputWithoutTones.toLowerCase() === removeTones(currentCard.back[0].toLowerCase()) || userInput.toLowerCase() === currentCard.back[1].toLowerCase()) {
+                inputField.classList.add('correct-without-tones');
+                feedbackText.classList.add('correct-without-tones');
+                feedbackText.textContent = "Correct, except the tones.";
+            } else {
+                inputField.classList.add('incorrect');
+                feedbackText.classList.add('incorrect');
+                feedbackText.textContent = "Incorrect, try again lah!";
+            }
+        }
+
         flipBtn.addEventListener('click', function() {
             card.classList.toggle('flipped');
             displayCard();
         });
 
         checkBtn.addEventListener('click', function() {
-            const currentCard = flashcardContents[currentCardIndex];
-            const userInput = inputField.value.trim();
-            if (userInput.toLowerCase() === currentCard.back[0].toLowerCase() || userInput.toLowerCase() === currentCard.back[1].toLowerCase()) {
-                inputField.classList.remove('incorrect');
-                inputField.classList.add('correct');
-            } else {
-                inputField.classList.remove('correct');
-                inputField.classList.add('incorrect');
-            }
+            checkAnswer();
         });
 
         nextBtn.addEventListener('click', function() {
@@ -182,12 +238,22 @@
                 currentCardIndex = 0;
             }
             card.classList.remove('flipped');
-            inputField.classList.remove('correct');
-            inputField.classList.remove('incorrect');
-            displayCard();
+
+            inputField.classList.remove('correct', 'correct-without-tones', 'incorrect');
+            feedbackText.classList.remove('correct', 'correct-without-tones', 'incorrect');
+            feedbackText.textContent = "";
+
             inputField.value = '';
             if (card.classList.contains('flipped')) {
                 card.classList.remove('flipped');
+            }
+
+            displayCard();
+        });
+
+        inputField.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
             }
         });
 
