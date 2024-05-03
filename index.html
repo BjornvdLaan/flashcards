@@ -245,19 +245,30 @@
             });
         }
 
-        function checkAnswer() {
-            const currentCard = flashcardContents[currentCardIndex];
-            const userInput = inputField.value.trim();
-            const userInputWithoutTones = removeTones(userInput);
+        function normalizeText(text) {
+            return text.trim().split(' ').join('').toLowerCase()
+        }
 
+        function resetColorsAndFeedback() {
             inputField.classList.remove('correct', 'correct-without-tones', 'incorrect');
             feedbackText.classList.remove('correct', 'correct-without-tones', 'incorrect');
+            feedbackText.textContent = "";
+        }
+
+        function checkAnswer() {
+            const currentCard = flashcardContents[currentCardIndex];
+            const currentCardAnswer = normalizeText(currentCard.back[0]);
+
+            const userInput = normalizeText(inputField.value);
+            const userInputWithoutTones = removeTones(userInput);
+
+            resetColorsAndFeedback();
             
-            if (userInput.toLowerCase() === currentCard.back[0].toLowerCase() || userInput.toLowerCase() === currentCard.back[1].toLowerCase()) {
+            if (userInput === currentCardAnswer) {
                 inputField.classList.add('correct');
                 feedbackText.classList.add('correct');
                 feedbackText.textContent = "Correct!";
-            } else if (userInputWithoutTones.toLowerCase() === removeTones(currentCard.back[0].toLowerCase()) || userInput.toLowerCase() === currentCard.back[1].toLowerCase()) {
+            } else if (removeTones(userInput) ===  removeTones(currentCardAnswer)) {
                 inputField.classList.add('correct-without-tones');
                 feedbackText.classList.add('correct-without-tones');
                 feedbackText.textContent = "Correct, except the tones.";
@@ -279,13 +290,9 @@
 
         nextBtn.addEventListener('click', function() {
             currentCardIndex = getRandomInt(flashcardContents.length);
- 
-            card.classList.remove('flipped');
-            inputField.classList.remove('correct', 'correct-without-tones', 'incorrect');
-            feedbackText.classList.remove('correct', 'correct-without-tones', 'incorrect');
-            feedbackText.textContent = "";
             inputField.value = "";
-
+            card.classList.remove('flipped');
+            resetColorsAndFeedback();
             displayCard();
         });
 
