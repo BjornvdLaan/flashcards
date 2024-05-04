@@ -113,11 +113,11 @@
         <br>
         <div class="flashcard">
             <div class="card-front">
-                <p>Study</p>
+                <p></p>
             </div>
             <div class="card-back">
-                <p>gōngkè</p>
-                <p>功课</p>
+                <p></p>
+                <p></p>
             </div>
         </div>
         <button id="flipBtn">Flip</button>
@@ -125,9 +125,8 @@
         <button id="nextBtn">Next</button>
         <br>
         <div>
-            <p>Lessons 8, 9, 10</p>
+            <p>Lessons 7, 8, 9, 10</p>
         </div>
-        <br>
         <div class="feedback-box">
             <p id="feedback-text"></p>
         </div>
@@ -143,15 +142,15 @@
 
         const flashcardContents = [
             // lesson 7
-            // { front: "to do", back: ["zuò", "做"] },
-            // { front: "job", back: ["gōngzuò", "工作"] },
-            // { front: "taxi", back: ["sījī", "司机"] },
-            // { front: "busy", back: ["máng", "忙"] },
-            // { front: "journalist", back: ["jìzhě", "记者"] },
-            // { front: "doctor", back: ["yīshēng", "医生"] },
-            // { front: "very much", back: ["fēicháng", "非常"] },
-            // { front: "housewife", back: ["jiātíng zhǔfù", "家庭主妇"] },
-            // { front: "most", back: ["zuì", "最"] },
+            { front: "to do", back: ["zuò", "做"] },
+            { front: "job", back: ["gōngzuò", "工作"] },
+            { front: "taxi", back: ["sījī", "司机"] },
+            { front: "busy", back: ["máng", "忙"] },
+            { front: "journalist", back: ["jìzhě", "记者"] },
+            { front: "doctor", back: ["yīshēng", "医生"] },
+            { front: "very much", back: ["fēicháng", "非常"] },
+            { front: "housewife", back: ["jiātíng zhǔfù", "家庭主妇"] },
+            { front: "most", back: ["zuì", "最"] },
             
             // lesson 8
             { front: "waitress", back: ["fúwùyuán", "服务员"] },
@@ -196,10 +195,11 @@
             { front: "Beijing opera", back: ["jīngjù", "京剧"] }
         ];
 
-        let currentCardIndex = getRandomInt(flashcardContents.length);
+        let remainingFlashcards = [...flashcardContents];
+        let currentCardIndex = getRandomInt(remainingFlashcards.length);
 
         function displayCard() {
-            const currentCard = flashcardContents[currentCardIndex];
+            const currentCard = remainingFlashcards[currentCardIndex];
             const isFlipped = card.classList.contains('flipped');
             if (!isFlipped) {
                 document.querySelector('.card-front p').textContent = currentCard.front;
@@ -256,7 +256,7 @@
         }
 
         function checkAnswer() {
-            const currentCard = flashcardContents[currentCardIndex];
+            const currentCard = remainingFlashcards[currentCardIndex];
             const currentCardAnswer = normalizeText(currentCard.back[0]);
 
             const userInput = normalizeText(inputField.value);
@@ -289,7 +289,13 @@
         });
 
         nextBtn.addEventListener('click', function() {
-            currentCardIndex = getRandomInt(flashcardContents.length);
+            if (remainingFlashcards.length == 1) {
+                remainingFlashcards = [...flashcardContents];
+            } else {
+                remainingFlashcards.splice(currentCardIndex, 1);
+            }
+            currentCardIndex = getRandomInt(remainingFlashcards.length);
+
             inputField.value = "";
             card.classList.remove('flipped');
             resetColorsAndFeedback();
