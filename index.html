@@ -125,7 +125,7 @@
         <button id="nextBtn">Next</button>
         <br>
         <div>
-            <p>Lessons 7, 8, 9, 10</p>
+            <p>Lessons 11, 12</p>
         </div>
         <div class="feedback-box">
             <p id="feedback-text"></p>
@@ -142,57 +142,83 @@
 
         const flashcardContents = [
             // lesson 7
-            { front: "to do", back: ["zuò", "做"] },
-            { front: "job", back: ["gōngzuò", "工作"] },
-            { front: "taxi", back: ["sījī", "司机"] },
-            { front: "busy", back: ["máng", "忙"] },
-            { front: "journalist", back: ["jìzhě", "记者"] },
-            { front: "doctor", back: ["yīshēng", "医生"] },
-            { front: "very much", back: ["fēicháng", "非常"] },
-            { front: "housewife", back: ["jiātíng zhǔfù", "家庭主妇"] },
-            { front: "most", back: ["zuì", "最"] },
+            // { front: "to do", back: ["zuò", "做"] },
+            // { front: "job", back: ["gōngzuò", "工作"] },
+            // { front: "taxi", back: ["sījī", "司机"] },
+            // { front: "busy", back: ["máng", "忙"] },
+            // { front: "journalist", back: ["jìzhě", "记者"] },
+            // { front: "doctor", back: ["yīshēng", "医生"] },
+            // { front: "very much", back: ["fēicháng", "非常"] },
+            // { front: "housewife", back: ["jiātíng zhǔfù", "家庭主妇"] },
+            // { front: "most", back: ["zuì", "最"] },
             
             // lesson 8
-            { front: "waitress", back: ["fúwùyuán", "服务员"] },
-            { front: "to serve", back: ["fúwù", "服务"] },
-            { front: "secretary", back: ["mìshū", "秘书"] },
-            { front: "chef", back: ["chúshī", "厨师"] },
-            { front: "lawyer", back: ["lǜshī", "律师"] },
-            { front: "laborious", back: ["xīnkǔ", "辛苦"] },
-            { front: "athlete", back: ["yùndòngyuán", "运动员"] },
-            { front: "to do sports", back: ["yùndòng", "运动"] },
-            { front: "student", back: ["xuésheng", "学生"] },
-            { front: "happy", back: ["kuài lè", "快乐"] },
+            // { front: "waitress", back: ["fúwùyuán", "服务员"] },
+            // { front: "to serve", back: ["fúwù", "服务"] },
+            // { front: "secretary", back: ["mìshū", "秘书"] },
+            // { front: "chef", back: ["chúshī", "厨师"] },
+            // { front: "lawyer", back: ["lǜshī", "律师"] },
+            // { front: "laborious", back: ["xīnkǔ", "辛苦"] },
+            // { front: "athlete", back: ["yùndòngyuán", "运动员"] },
+            // { front: "to do sports", back: ["yùndòng", "运动"] },
+            // { front: "student", back: ["xuésheng", "学生"] },
+            // { front: "happy", back: ["kuài lè", "快乐"] },
 
 
             // lesson 9
-            { front: "to like", back: ["xǐhuan", "喜欢"] },
-            { front: "to play", back: ["dǎ", "打"] },
-            { front: "basketball", back: ["lánqiú", "篮球"] },
-            { front: "to sing", back: ["chàng gē", "唱歌"] },
-            { front: "shadowboxing", back: ["tài jí quán", "太极拳"] },
-            { front: "to surf on the internet", back: ["shàng wǎng", "上网"] },
-            { front: "they", back: ["tāmen", "他们"] },
-            { front: "both", back: ["dōu", "都"] },
-            { front: "to eat", back: ["chī", "吃"] },
-            { front: "Chinese food", back: ["zhōngguó cài", "中国菜"] },
-            { front: "to sleep", back: ["shuì jiào", "睡觉"] },
+            // { front: "to like", back: ["xǐhuan", "喜欢"] },
+            // { front: "to play", back: ["dǎ", "打"] },
+            // { front: "basketball", back: ["lánqiú", "篮球"] },
+            // { front: "to sing", back: ["chàng gē", "唱歌"] },
+            // { front: "shadowboxing", back: ["tài jí quán", "太极拳"] },
+            // { front: "to surf on the internet", back: ["shàng wǎng", "上网"] },
+            // { front: "they", back: ["tāmen", "他们"] },
+            // { front: "both", back: ["dōu", "都"] },
+            // { front: "to eat", back: ["chī", "吃"] },
+            // { front: "Chinese food", back: ["zhōngguó cài", "中国菜"] },
+            // { front: "to sleep", back: ["shuì jiào", "睡觉"] },
             //{ front: "model partical at end of alternative sentence" back: ["ne", "呢"] }
 
             // lesson 10
-            { front: "to listen", back: ["tīng", "听"] },
-            { front: "music", back: ["yīnyuè", "音乐"] },
-            { front: "to do physical exercises", back: ["jiànshēn", "健身"] },
-            { front: "to drink", back: ["hē", "喝"] },
-            { front: "tea", back: ["chá", "茶"] },
-            { front: "to see", back: ["kàn", "看"] },
-            { front: "television", back: ["diànshì", "电视"] },
-            { front: "movie", back: ["diànyǐng", "电影"] },
-            { front: "newpaper", back: ["bàozhǐ", "报纸"] },
-            { front: "book", back: ["shū", "书"] },
-            { front: "to write", back: ["xiě", "写"] },
-            { front: "microblog", back: ["wēibó", "微博"] },
-            { front: "Beijing opera", back: ["jīngjù", "京剧"] }
+            // { front: "to listen", back: ["tīng", "听"] },
+            // { front: "music", back: ["yīnyuè", "音乐"] },
+            // { front: "to do physical exercises", back: ["jiànshēn", "健身"] },
+            // { front: "to drink", back: ["hē", "喝"] },
+            // { front: "tea", back: ["chá", "茶"] },
+            // { front: "to see", back: ["kàn", "看"] },
+            // { front: "television", back: ["diànshì", "电视"] },
+            // { front: "movie", back: ["diànyǐng", "电影"] },
+            // { front: "newpaper", back: ["bàozhǐ", "报纸"] },
+            // { front: "book", back: ["shū", "书"] },
+            // { front: "to write", back: ["xiě", "写"] },
+            // { front: "microblog", back: ["wēibó", "微博"] },
+            // { front: "Beijing opera", back: ["jīngjù", "京剧"] }
+
+            // lesson 11
+            { front: "father", back: ["bàba", "爸爸"] },
+            { front: "mother", back: ["māma", "妈妈"] },
+            { front: "beautiful", back: ["piàoliang", "漂亮"] },
+            { front: "to have", back: ["yǒu", "有"] },
+            { front: "many", back: ["duō", "多"] },
+            { front: "clothes", back: ["yī fu", "衣服"] },
+            { front: "not to have", back: ["méi yǒu", "没有"] },
+            { front: "elder brother", back: ["gēge", "哥哥"] },
+            { front: "one", back: ["yī", "一"] },
+            { front: "measure word", back: ["gè", "个"] },
+            { front: "elder sister", back: ["jiějie", "姐姐"] },
+            { front: "boyfriend", back: ["nán péng you", "男朋友"] },
+            { front: "to date", back: ["yuēhuì", "约会"] },
+
+            // lesson 12
+            { front: "how many", back: ["jǐ", "几"] },
+            { front: "younger brother", back: ["dìdi", "弟弟"] },
+            { front: "two", back: ["liǎng", "两"] },
+            { front: "younger sister", back: ["mèimei", "妹妹"] },
+            { front: "family", back: ["jiā", "家"] },
+            { front: "five", back: ["wǔ", "五"] },
+            { front: "measure word", back: ["kǒu", "口"] },
+            { front: "three", back: ["sān", "三"] },
+            { front: "four", back: ["sì", "四"] }, // technically not in lesson 12
         ];
 
         let remainingFlashcards = [...flashcardContents];
