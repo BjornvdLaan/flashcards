@@ -244,7 +244,7 @@
             { front: "computer", back: ["diàn nǎo", "电脑"] },
             { front: "right (side)", back: ["yòubian", "右边"] },
             { front: "chair", back: ["yǐzi", "椅子"] },
-            { front: "chair", back: ["yīguì", "衣柜"] },
+            { front: "wardrobe", back: ["yīguì", "衣柜"] },
         ];
 
         let remainingFlashcards = [...flashcardContents];
@@ -312,7 +312,6 @@
             const currentCardAnswer = normalizeText(currentCard.back[0]);
 
             const userInput = normalizeText(inputField.value);
-            const userInputWithoutTones = removeTones(userInput);
 
             resetColorsAndFeedback();
             
