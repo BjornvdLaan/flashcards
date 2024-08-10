@@ -24,37 +24,25 @@
         .flashcard {
             width: 100%;
             height: 100px;
-            perspective: 1000px;
             margin: 10px auto 20px;
         }
 
-        .card-front, .card-back {
+        .card-front {
             width: 100%;
-            height: 100%;
-            position: absolute;
-            backface-visibility: hidden;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-front {
             background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
             align-items: center;
+            padding-top: 20px;
+            padding-bottom: 20px;
         }
 
-        .card-back {
-            background-color: #e0e0e0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            transform: rotateY(180deg);
-        }
-
-        .card-front > p, .card-back > p {
+        .card-front > p {
             font-size: 22px;
+        }
+
+        .card-front > p.sentence {
+            font-size: 18px;
         }
 
         button {
@@ -114,15 +102,14 @@
         <div class="flashcard">
             <div class="card-front">
                 <p></p>
-            </div>
-            <div class="card-back">
-                <p></p>
-                <p></p>
+                <p class="sentence"></p>
             </div>
         </div>
-        <button id="flipBtn">Flip</button>
-        <button id="checkBtn">Check Answer</button>
-        <button id="nextBtn">Next</button>
+        <div>
+            <button id="flipBtn">Flip</button>
+            <button id="checkBtn">Check Answer</button>
+            <button id="nextBtn">Next</button>
+        </div>
         <br>
         <div>
             <p>150 words of HSK 1</p>
@@ -141,160 +128,180 @@
         const feedbackText = document.getElementById('feedback-text');
 
         const flashcardContents = [
-        { front: "I, me", back: ["wǒ", "我"] },
-        { front: "we, us (pl.)", back: ["wǒmen", "我们"] },
-        { front: "you", back: ["nǐ", "你"] },
-        { front: "you (pl.)", back: ["nǐmen", "你们"] },
-        { front: "he, him", back: ["tā", "他"] },
-        { front: "she, her", back: ["tā", "她"] },
-        { front: "they (male+female / male, pl.)", back: ["tāmen", "他们"] },
-        { front: "they (females, pl.)", back: ["tāmen", "她们"] },
-        { front: "here, this", back: ["zhè ( zhèr)", "这 (这儿)"] },
-        { front: "there, that", back: ["nà (nàr)", "那 (那儿)"] },
-        { front: "where", back: ["nǎ (nǎr)", "哪（哪儿）"] },
-        { front: "who", back: ["shuí", "谁"] },
-        { front: "what, why", back: ["shén me", "什么"] },
-        { front: "how many, how much", back: ["duōshǎo", "多少"] },
-        { front: "a few, how many", back: ["jǐ", "几"] },
-        { front: "how", back: ["zěnme", "怎么"] },
-        { front: "how about", back: ["zěnmeyàng", "怎么样"] },
-        { front: "one", back: ["yī", "一"] },
-        { front: "two", back: ["èr", "二"] },
-        { front: "three", back: ["sān", "三"] },
-        { front: "four", back: ["sì", "四"] },
-        { front: "five", back: ["wǔ", "五"] },
-        { front: "six", back: ["liù", "六"] },
-        { front: "seven", back: ["qī", "七"] },
-        { front: "eight", back: ["bā", "八"] },
-        { front: "nine", back: ["jiǔ", "九"] },
-        { front: "ten", back: ["shí", "十"] },
-        { front: "zero", back: ["líng", "零"] },
-        { front: "one, a, an", back: ["gè", "个"] },
-        { front: "year", back: ["suì", "岁"] },
-        { front: "volume", back: ["běn", "本"] },
-        { front: "some", back: ["xiē", "些"] },
-        { front: "piece", back: ["kuài", "块"] },
-        { front: "no", back: ["bù", "不"] },
-        { front: "no", back: ["méi", "没"] },
-        { front: "quite, very", back: ["hěn", "很"] },
-        { front: "too", back: ["tài", "太"] },
-        { front: "all", back: ["dōu", "都"] },
-        { front: "and", back: ["hé", "和"] },
-        { front: "in, at", back: ["zài", "在"] },
-        { front: "", back: ["de", "的"] },
-        { front: "", back: ["le", "了"] },
-        { front: "", back: ["ma", "吗"] },
-        { front: "", back: ["ne", "呢"] },
-        { front: "hello", back: ["wèi", "喂"] },
-        { front: "home", back: ["jiā", "家"] },
-        { front: "school", back: ["xuéxiào", "学校"] },
-        { front: "restaurant", back: ["fàndiàn", "饭店"] },
-        { front: "store", back: ["shāngdiàn", "商店"] },
-        { front: "hospital", back: ["yīyuàn", "医院"] },
-        { front: "train station", back: ["huǒchēzhàn", "火车站"] },
-        { front: "China", back: ["zhōng guó", "中国"] },
-        { front: "Beijing", back: ["běijīng", "北京"] },
-        { front: "up", back: ["shàng", "上"] },
-        { front: "down", back: ["xià", "下"] },
-        { front: "front", back: ["qiánmiàn", "前面"] },
-        { front: "behind", back: ["hòumiàn", "后面"] },
-        { front: "inside", back: ["lǐmiàn", "里"] },
-        { front: "today", back: ["jīntiān", "今天"] },
-        { front: "tomorrow", back: ["míngtiān", "明天"] },
-        { front: "yesterday", back: ["zuótiān", "昨天"] },
-        { front: "morning", back: ["shàngwǔ", "上午"] },
-        { front: "noon", back: ["zhōngwǔ", "中午"] },
-        { front: "afternoon", back: ["xiàwǔ", "下午"] },
-        { front: "year", back: ["nián", "年"] },
-        { front: "month", back: ["yuè", "月"] },
-        { front: "day", back: ["rì", "日"] },
-        { front: "week", back: ["xīngqī", "星期"] },
-        { front: "dot, spot", back: ["diǎn", "点"] },
-        { front: "minute", back: ["fēnzhōng", "分钟"] },
-        { front: "now", back: ["xiànzài", "现在"] },
-        { front: "time", back: ["shíhou", "时候"] },
-        { front: "father", back: ["bàba", "爸爸"] },
-        { front: "mother", back: ["māma", "妈妈"] },
-        { front: "son", back: ["érzi", "儿子"] },
-        { front: "daughter", back: ["nǚér", "女儿"] },
-        { front: "teacher", back: ["lǎoshī", "老师"] },
-        { front: "student", back: ["xuéshēng", "学生"] },
-        { front: "schoolmate", back: ["tóngxué", "同学"] },
-        { front: "friend", back: ["péngyou", "朋友"] },
-        { front: "doctor", back: ["yīshēng", "医生"] },
-        { front: "sir", back: ["xiānsheng", "先生"] },
-        { front: "Miss", back: ["xiǎojiě", "小姐"] },
-        { front: "cloth", back: ["yīfu", "衣服"] },
-        { front: "water", back: ["shuǐ", "水"] },
-        { front: "vegetable", back: ["cài", "菜"] },
-        { front: "rice", back: ["mǐfàn", "米饭"] },
-        { front: "fruit", back: ["shuǐguǒ", "水果"] },
-        { front: "apple", back: ["píngguǒ", "苹果"] },
-        { front: "tea", back: ["chá", "茶"] },
-        { front: "cup", back: ["bēizi", "杯子"] },
-        { front: "money", back: ["qián", "钱"] },
-        { front: "airplane", back: ["fēijī", "飞机"] },
-        { front: "taxi", back: ["chūzūchē", "出租车"] },
-        { front: "television", back: ["diànshì", "电视"] },
-        { front: "computer", back: ["diànnǎo", "电脑"] },
-        { front: "movie", back: ["diànyǐng", "电影"] },
-        { front: "weather", back: ["tiānqì", "天气"] },
-        { front: "cat", back: ["māo", "猫"] },
-        { front: "dog", back: ["gǒu", "狗"] },
-        { front: "thing", back: ["dōngxi", "东西"] },
-        { front: "person", back: ["rén", "人"] },
-        { front: "name", back: ["míngzi", "名字"] },
-        { front: "book", back: ["shū", "书"] },
-        { front: "mandarin Chinese", back: ["hànyǔ", "汉语"] },
-        { front: "character", back: ["zì", "字"] },
-        { front: "desk", back: ["zhuōzi", "桌子"] },
-        { front: "chair", back: ["yǐzi", "椅子"] },
-        { front: "thank", back: ["xièxie", "谢谢"] },
-        { front: "you are welcome", back: ["búkèqì", "不客气"] },
-        { front: "good-bye", back: ["zàijiàn", "再见"] },
-        { front: "please", back: ["qǐng", "请"] },
-        { front: "sorry", back: ["duìbùqǐ", "对不起"] },
-        { front: "It doesn’t matter", back: ["méiguānxì", "没关系"] },
-        { front: "be (am, is, are)", back: ["shì", "是"] },
-        { front: "have", back: ["yǒu", "有"] },
-        { front: "look", back: ["kàn", "看"] },
-        { front: "listen", back: ["tīng", "听"] },
-        { front: "speak", back: ["shuōhuà", "说话"] },
-        { front: "read", back: ["dú", "读"] },
-        { front: "write", back: ["xiě", "写"] },
-        { front: "see", back: ["kànjiàn", "看见"] },
-        { front: "call", back: ["jiào", "叫"] },
-        { front: "come", back: ["lái", "来"] },
-        { front: "return", back: ["huí", "回"] },
-        { front: "go", back: ["qù", "去"] },
-        { front: "eat", back: ["chī", "吃"] },
-        { front: "drink", back: ["hē", "喝"] },
-        { front: "sleep", back: ["shuìjiào", "睡觉"] },
-        { front: "call up", back: ["dǎdiànhuà", "打电话"] },
-        { front: "do", back: ["zuò", "做"] },
-        { front: "buy", back: ["mǎi", "买"] },
-        { front: "open", back: ["kāi", "开"] },
-        { front: "sit", back: ["zuò", "坐"] },
-        { front: "live", back: ["zhù", "住"] },
-        { front: "study", back: ["xuéxí", "学习"] },
-        { front: "work", back: ["gōngzuò", "工作"] },
-        { front: "rain", back: ["xiàyǔ", "下雨"] },
-        { front: "love", back: ["ài", "爱"] },
-        { front: "love, like", back: ["xǐhuān", "喜欢"] },
-        { front: "want", back: ["xiǎng", "想"] },
-        { front: "know", back: ["rènshi", "认识"] },
-        { front: "can", back: ["huì", "会"] },
-        { front: "can, be able to", back: ["néng", "能"] },
-        { front: "good", back: ["hǎo", "好"] },
-        { front: "big", back: ["dà", "大"] },
-        { front: "small", back: ["xiǎo", "小"] },
-        { front: "many, much", back: ["duō", "多"] },
-        { front: "few, little", back: ["shǎo", "少"] },
-        { front: "cold", back: ["lěng", "冷"] },
-        { front: "hot", back: ["rè", "热"] },
-        { front: "happy", back: ["gāoxìng", "高兴"] },
-        { front: "beautiful", back: ["piàoliàng", "漂亮"] }
-
+            { "front": "I, me", "back": ["wǒ", "我"], "sentence": "Wǒ shì xuéshēng." },
+            { "front": "we, us (pl.)", "back": ["wǒmen", "我们"], "sentence": "Wǒmen shì péngyǒu." },
+            { "front": "you", "back": ["nǐ", "你"], "sentence": "Nǐ hǎo." },
+            { "front": "you (pl.)", "back": ["nǐmen", "你们"], "sentence": "Nǐmen hǎo." },
+            { "front": "he, him", "back": ["tā", "他"], "sentence": "Tā shì lǎoshī." },
+            { "front": "she, her", "back": ["tā", "她"], "sentence": "Tā shì xuéshēng." },
+            { "front": "they (male+female / male, pl.)", "back": ["tāmen", "他们"], "sentence": "Tāmen shì lǎoshī." },
+            { "front": "they (females, pl.)", "back": ["tāmen", "她们"], "sentence": "Tāmen shì xuéshēng." },
+            { "front": "here, this", "back": ["zhè", "这"], "sentence": "Zhè shì wǒ de shū." },
+            { "front": "there, that", "back": ["nà (nàr)", "那 (那儿)"], "sentence": "Nà shì tā de jiā." },
+            { "front": "where", "back": ["nǎ", "哪"], "sentence": "Nǐ zài nǎr?" },
+            { "front": "who", "back": ["shuí", "谁"], "sentence": "Shuí shì tā?" },
+            { "front": "what, why", "back": ["shén me", "什么"], "sentence": "Zhè shì shénme?" },
+            { "front": "how many, how much", "back": ["duōshǎo", "多少"], "sentence": "Zhè duōshǎo qián?" },
+            { "front": "a few, how many", "back": ["jǐ", "几"], "sentence": "Nǐ yǒu jǐ gè shū?" },
+            { "front": "how", "back": ["zěnme", "怎么"], "sentence": "Nǐ zěnme qù?" },
+            { "front": "how about", "back": ["zěnmeyàng", "怎么样"], "sentence": "Zhège cài zěnmeyàng?" },
+            { "front": "one", "back": ["yī", "一"], "sentence": "Wǒ yǒu yī běn shū." },
+            { "front": "two", "back": ["èr", "二"], "sentence": "Wǒ yǒu liǎng gè píngguǒ." },
+            { "front": "three", "back": ["sān", "三"], "sentence": "Wǒ yǒu sān gè bēizi." },
+            { "front": "four", "back": ["sì", "四"], "sentence": "Wǒ yǒu sì zhī bǐ." },
+            { "front": "five", "back": ["wǔ", "五"], "sentence": "Wǒ yǒu wǔ gè péngyǒu." },
+            { "front": "six", "back": ["liù", "六"], "sentence": "Wǒ yǒu liù gè píngguǒ." },
+            { "front": "seven", "back": ["qī", "七"], "sentence": "Wǒ yǒu qī běn shū." },
+            { "front": "eight", "back": ["bā", "八"], "sentence": "Wǒ yǒu bā gè bēizi." },
+            { "front": "nine", "back": ["jiǔ", "九"], "sentence": "Wǒ yǒu jiǔ zhī bǐ." },
+            { "front": "ten", "back": ["shí", "十"], "sentence": "Wǒ yǒu shí gè péngyǒu." },
+            { "front": "zero", "back": ["líng", "零"], "sentence": "Zhège shì líng." },
+            { "front": "one, a, an", "back": ["gè", "个"], "sentence": "Wǒ yǒu yī gè píngguǒ." },
+            { "front": "year", "back": ["suì", "岁"], "sentence": "Wǒ wǔ suì." },
+            { "front": "volume (measure word for book)", "back": ["běn", "本"], "sentence": "Wǒ yǒu yī běn shū." },
+            { "front": "some", "back": ["xiē", "些"], "sentence": "Wǒ yào xiē shuǐguǒ." },
+            { "front": "piece", "back": ["kuài", "块"], "sentence": "Wǒ yào yī kuài dàngāo." },
+            { "front": "no", "back": ["bù", "不"], "sentence": "Wǒ bù yào." },
+            { "front": "no", "back": ["méi", "没"], "sentence": "Wǒ méi yǒu." },
+            { "front": "quite, very", "back": ["hěn", "很"], "sentence": "Tā hěn gāoxìng." },
+            { "front": "too", "back": ["tài", "太"], "sentence": "Zhèlǐ tài lěng." },
+            { "front": "all", "back": ["dōu", "都"], "sentence": "Wǒmen dōu zài." },
+            { "front": "and", "back": ["hé", "和"], "sentence": "Wǒ hé nǐ shì péngyǒu." },
+            { "front": "in, at", "back": ["zài", "在"], "sentence": "Wǒ zài jiā." },
+            { "front": "hello", "back": ["wèi", "喂"], "sentence": "Wèi, nǐ hǎo." },
+            { "front": "home", "back": ["jiā", "家"], "sentence": "Wǒ huí jiā." },
+            { "front": "school", "back": ["xuéxiào", "学校"], "sentence": "Wǒ qù xuéxiào." },
+            { "front": "restaurant", "back": ["fàndiàn", "饭店"], "sentence": "Wǒ qù fàndiàn." },
+            { "front": "store", "back": ["shāngdiàn", "商店"], "sentence": "Wǒ zài shāngdiàn." },
+            { "front": "hospital", "back": ["yīyuàn", "医院"], "sentence": "Wǒ zài yīyuàn." },
+            { "front": "train station", "back": ["huǒchēzhàn", "火车站"], "sentence": "Wǒ qù huǒchēzhàn." },
+            { "front": "China", "back": ["zhōng guó", "中国"], "sentence": "Wǒ zài Zhōngguó." },
+            { "front": "Beijing", "back": ["běijīng", "北京"], "sentence": "Wǒ qù Běijīng." },
+            { "front": "up", "back": ["shàng", "上"], "sentence": "Wǒ zài shàng." },
+            { "front": "down", "back": ["xià", "下"], "sentence": "Wǒ zài xià." },
+            { "front": "front", "back": ["qiánmiàn", "前面"], "sentence": "Nǐ zài qiánmiàn." },
+            { "front": "behind", "back": ["hòumiàn", "后面"], "sentence": "Wǒ zài hòumiàn." },
+            { "front": "inside", "back": ["lǐmiàn", "里"], "sentence": "Wǒ zài lǐmiàn." },
+            { "front": "today", "back": ["jīntiān", "今天"], "sentence": "Jīntiān tiānqì hǎo." },
+            { "front": "tomorrow", "back": ["míngtiān", "明天"], "sentence": "Míngtiān wǒ qù xuéxiào." },
+            { "front": "yesterday", "back": ["zuótiān", "昨天"], "sentence": "Zuótiān wǒ hē chá." },
+            { "front": "morning", "back": ["shàngwǔ", "上午"], "sentence": "Shàngwǔ wǒ chī zǎofàn." },
+            { "front": "noon", "back": ["zhōngwǔ", "中午"], "sentence": "Zhōngwǔ wǒ chī wǔfàn." },
+            { "front": "afternoon", "back": ["xiàwǔ", "下午"], "sentence": "Xiàwǔ wǒ qù jiā." },
+            { "front": "evening", "back": ["wǎnshàng", "晚上"], "sentence": "Wǎnshàng wǒ qù fàndiàn." },
+            { "front": "now", "back": ["xiànzài", "现在"], "sentence": "Xiànzài wǒ zài xuéxiào." },
+            { "front": "hour", "back": ["zhōngtíng", "钟点"], "sentence": "Yī zhōngtíng." },
+            { "front": "minute", "back": ["fēnzhōng", "分钟"], "sentence": "Yī fēnzhōng." },
+            { "front": "second", "back": ["miǎozhōng", "秒钟"], "sentence": "Yī miǎozhōng." },
+            { "front": "father", "back": ["bàba", "爸爸"], "sentence": "Wǒ de bàba zài jiā." },
+            { "front": "mother", "back": ["māma", "妈妈"], "sentence": "Wǒ de māma hěn hǎo." },
+            { "front": "son", "back": ["érzi", "儿子"], "sentence": "Wǒ yǒu yī gè érzi." },
+            { "front": "daughter", "back": ["nǔér", "女儿"], "sentence": "Wǒ de nǔér zài xuéxiào." },
+            { "front": "teacher", "back": ["lǎoshī", "老师"], "sentence": "Lǎoshī zài xuéxiào." },
+            { "front": "student", "back": ["xuéshēng", "学生"], "sentence": "Wǒ shì xuéshēng." },
+            { "front": "schoolmate", "back": ["tóngxué", "同学"], "sentence": "Tóngxué zài xuéxiào." },
+            { "front": "friend", "back": ["péngyou", "朋友"], "sentence": "Wǒ yǒu hěn duō péngyou." },
+            { "front": "doctor", "back": ["yīshēng", "医生"], "sentence": "Yīshēng zài yīyuàn." },
+            { "front": "sir", "back": ["xiānsheng", "先生"], "sentence": "Xiānsheng zài zhèr." },
+            { "front": "Miss", "back": ["xiǎojiě", "小姐"], "sentence": "Xiǎojiě zài fàndiàn." },
+            { "front": "cloth", "back": ["yīfu", "衣服"], "sentence": "Wǒ mǎi yīfu." },
+            { "front": "water", "back": ["shuǐ", "水"], "sentence": "Wǒ hē shuǐ." },
+            { "front": "vegetable", "back": ["cài", "菜"], "sentence": "Wǒ xǐhuān chī cài." },
+            { "front": "rice", "back": ["mǐfàn", "米饭"], "sentence": "Wǒ chī mǐfàn." },
+            { "front": "fruit", "back": ["shuǐguǒ", "水果"], "sentence": "Wǒ yào shuǐguǒ." },
+            { "front": "apple", "back": ["píngguǒ", "苹果"], "sentence": "Wǒ chī píngguǒ." },
+            { "front": "tea", "back": ["chá", "茶"], "sentence": "Wǒ hē chá." },
+            { "front": "cup", "back": ["bēizi", "杯子"], "sentence": "Wǒ yào yī bēizi." },
+            { "front": "money", "back": ["qián", "钱"], "sentence": "Wǒ yǒu qián." },
+            { "front": "airplane", "back": ["fēijī", "飞机"], "sentence": "Wǒ qù fēijīchǎng." },
+            { "front": "taxi", "back": ["chūzūchē", "出租车"], "sentence": "Wǒ qù chūzūchē." },
+            { "front": "television", "back": ["diànshì", "电视"], "sentence": "Wǒ kàn diànshì." },
+            { "front": "computer", "back": ["diànnǎo", "电脑"], "sentence": "Wǒ yòng diànnǎo." },
+            { "front": "movie", "back": ["diànyǐng", "电影"], "sentence": "Wǒ kàn diànyǐng." },
+            { "front": "weather", "back": ["tiānqì", "天气"], "sentence": "Tiānqì hěn hǎo." },
+            { "front": "cat", "back": ["māo", "猫"], "sentence": "Wǒ yǒu yī zhī māo." },
+            { "front": "dog", "back": ["gǒu", "狗"], "sentence": "Wǒ yǒu yī zhī gǒu." },
+            { "front": "thing", "back": ["dōngxi", "东西"], "sentence": "Zhè shì yī gè dōngxi." },
+            { "front": "person", "back": ["rén", "人"], "sentence": "Wǒ shì yī gè rén." },
+            { "front": "name", "back": ["míngzi", "名字"], "sentence": "Wǒ de míngzi shì Lǐ." },
+            { "front": "book", "back": ["shū", "书"], "sentence": "Wǒ yǒu yī běn shū." },
+            { "front": "mandarin Chinese", "back": ["hànyǔ", "汉语"], "sentence": "Wǒ xuéxí Hànyǔ." },
+            { "front": "character", "back": ["zì", "字"], "sentence": "Zhè shì yī gè zì." },
+            { "front": "desk", "back": ["zhuōzi", "桌子"], "sentence": "Zhè shì yī zhāng zhuōzi." },
+            { "front": "chair", "back": ["yǐzi", "椅子"], "sentence": "Wǒ yǒu yī zhī yǐzi." },
+            { "front": "thank", "back": ["xièxie", "谢谢"], "sentence": "Xièxie nǐ!" },
+            { "front": "you are welcome", "back": ["búkèqì", "不客气"], "sentence": "Búkèqì!" },
+            { "front": "good-bye", "back": ["zàijiàn", "再见"], "sentence": "Zàijiàn!" },
+            { "front": "please", "back": ["qǐng", "请"], "sentence": "Qǐng zhùyì." },
+            { "front": "sorry", "back": ["duìbùqǐ", "对不起"], "sentence": "Duìbùqǐ!" },
+            { "front": "It doesnt matter", "back": ["méiguānxì", "没关系"], "sentence": "Méiguānxì." },
+            { "front": "be (am, is, are)", "back": ["shì", "是"], "sentence": "Wǒ shì lǎoshī." },
+            { "front": "have", "back": ["yǒu", "有"], "sentence": "Wǒ yǒu yī běn shū." },
+            { "front": "look", "back": ["kàn", "看"], "sentence": "Wǒ kàn shū." },
+            { "front": "read", "back": ["dú", "读"], "sentence": "Wǒ dú shū." },
+            { "front": "speak", "back": ["shuō", "说"], "sentence": "Wǒ shuō Hànyǔ." },
+            { "front": "eat", "back": ["chī", "吃"], "sentence": "Wǒ chī fàn." },
+            { "front": "drink", "back": ["hē", "喝"], "sentence": "Wǒ hē shuǐ." },
+            { "front": "go", "back": ["qù", "去"], "sentence": "Wǒ qù jiā." },
+            { "front": "come", "back": ["lái", "来"], "sentence": "Wǒ lái xuéxiào." },
+            { "front": "give", "back": ["gěi", "给"], "sentence": "Wǒ gěi nǐ yī běn shū." },
+            { "front": "buy", "back": ["mǎi", "买"], "sentence": "Wǒ mǎi píngguǒ." },
+            { "front": "sell", "back": ["mài", "卖"], "sentence": "Wǒ mài shū." },
+            { "front": "write", "back": ["xiě", "写"], "sentence": "Wǒ xiě hànzì." },
+            { "front": "sing", "back": ["chàng", "唱"], "sentence": "Wǒ chàng gē." },
+            { "front": "dance", "back": ["tiàowǔ", "跳舞"], "sentence": "Wǒ huì tiàowǔ." },
+            { "front": "play", "back": ["wán", "玩"], "sentence": "Wǒ wán yóuxì." },
+            { "front": "love", "back": ["ài", "爱"], "sentence": "Wǒ ài wǒ de jiārén." },
+            { "front": "know", "back": ["zhīdào", "知道"], "sentence": "Wǒ zhīdào." },
+            { "front": "understand", "back": ["lǐjiě", "理解"], "sentence": "Wǒ lǐjiě zhège." },
+            { "front": "ask", "back": ["wèn", "问"], "sentence": "Wǒ wèn yī gè wèntí." },
+            { "front": "answer", "back": ["huídá", "回答"], "sentence": "Wǒ huídá wèntí." },
+            { "front": "find", "back": ["zhǎodào", "找到"], "sentence": "Wǒ zhǎodào wǒ de shū." },
+            { "front": "lose", "back": ["diū", "丢"], "sentence": "Wǒ bù xiǎng diū shū." },
+            { "front": "meet", "back": ["rènshi", "认识"], "sentence": "Wǒ rènshi nǐ." },
+            { "front": "like", "back": ["xǐhuān", "喜欢"], "sentence": "Wǒ xǐhuān zhège." },
+            { "front": "want", "back": ["yào", "要"], "sentence": "Wǒ yào chī." },
+            { "front": "need", "back": ["xūyào", "需要"], "sentence": "Wǒ xūyào bāngzhù." },
+            { "front": "get up", "back": ["qǐchuáng", "起床"], "sentence": "Wǒ zǎoshang qǐchuáng." },
+            { "front": "go to bed", "back": ["shuìjiào", "睡觉"], "sentence": "Wǒ wǎnshàng shuìjiào." },
+            { "front": "sleep", "back": ["shuì", "睡"], "sentence": "Wǒ shūi zhù." },
+            { "front": "go out", "back": ["chūqù", "出去"], "sentence": "Wǒ chūqù wán." },
+            { "front": "come in", "back": ["jìn", "进"], "sentence": "Qǐng jìn." },
+            { "front": "open", "back": ["kāi", "开"], "sentence": "Qǐng kāi mén." },
+            { "front": "close", "back": ["guān", "关"], "sentence": "Qǐng guān mén." },
+            { "front": "start", "back": ["kāishǐ", "开始"], "sentence": "Kāishǐ xuéxí." },
+            { "front": "stop", "back": ["tíng", "停"], "sentence": "Tíng yùndòng." },
+            { "front": "buy", "back": ["mǎi", "买"], "sentence": "Wǒ mǎi yī běn shū." },
+            { "front": "sell", "back": ["mài", "卖"], "sentence": "Wǒ mài dōngxi." },
+            { "front": "go", "back": ["qù", "去"], "sentence": "Wǒ qù fàndiàn." },
+            { "front": "come", "back": ["lái", "来"], "sentence": "Wǒ lái xuéxiào." },
+            { "front": "send", "back": ["sòng", "送"], "sentence": "Wǒ sòng nǐ huí jiā." },
+            { "front": "eat", "back": ["chī", "吃"], "sentence": "Wǒ chī mǐfàn." },
+            { "front": "drink", "back": ["hē", "喝"], "sentence": "Wǒ hē chá." },
+            { "front": "call", "back": ["dǎ", "打"], "sentence": "Wǒ dǎ diànhuà." },
+            { "front": "think", "back": ["xiǎng", "想"], "sentence": "Wǒ xiǎng zhège." },
+            { "front": "learn", "back": ["xué", "学"], "sentence": "Wǒ xué Hànyǔ." },
+            { "front": "study", "back": ["xuéxí", "学习"], "sentence": "Wǒ xuéxí Zhōngwén." },
+            { "front": "watch", "back": ["kàn", "看"], "sentence": "Wǒ kàn diànyǐng." },
+            { "front": "listen", "back": ["tīng", "听"], "sentence": "Wǒ tīng yīnyuè." },
+            { "front": "talk", "back": ["tán", "谈"], "sentence": "Wǒmen tánhuà." },
+            { "front": "speak", "back": ["shuō", "说"], "sentence": "Wǒ shuō Hànyǔ." },
+            { "front": "write", "back": ["xiě", "写"], "sentence": "Wǒ xiě xìn." },
+            { "front": "read", "back": ["dú", "读"], "sentence": "Wǒ dú shū." },
+            { "front": "sing", "back": ["chàng", "唱"], "sentence": "Wǒ chàng gē." },
+            { "front": "dance", "back": ["tiàowǔ", "跳舞"], "sentence": "Wǒ huì tiàowǔ." },
+            { "front": "play", "back": ["wán", "玩"], "sentence": "Wǒ wán yóuxì." },
+            { "front": "love", "back": ["ài", "爱"], "sentence": "Wǒ ài wǒ de jiārén." },
+            { "front": "like", "back": ["xǐhuān", "喜欢"], "sentence": "Wǒ xǐhuān zhège." },
+            { "front": "need", "back": ["xūyào", "需要"], "sentence": "Wǒ xūyào bāngzhù." },
+            { "front": "want", "back": ["yào", "要"], "sentence": "Wǒ yào chī." },
+            { "front": "help", "back": ["bāngzhù", "帮助"], "sentence": "Nǐ kěyǐ bāngzhù wǒ ma?" },
+            { "front": "know", "back": ["zhīdào", "知道"], "sentence": "Wǒ zhīdào." },
+            { "front": "understand", "back": ["lǐjiě", "理解"], "sentence": "Wǒ lǐjiě zhège." },
+            { "front": "ask", "back": ["wèn", "问"], "sentence": "Wǒ wèn yī gè wèntí." },
+            { "front": "answer", "back": ["huídá", "回答"], "sentence": "Wǒ huídá wèntí." },
+            { "front": "find", "back": ["zhǎodào", "找到"], "sentence": "Wǒ zhǎodào wǒ de shū." },
+            { "front": "lose", "back": ["diū", "丢"], "sentence": "Wǒ bù xiǎng diū shū." }
         ];
 
         let remainingFlashcards = [...flashcardContents];
@@ -304,13 +311,11 @@
             const currentCard = remainingFlashcards[currentCardIndex];
             const isFlipped = card.classList.contains('flipped');
             if (!isFlipped) {
-                document.querySelector('.card-front p').textContent = currentCard.front;
-                document.querySelector('.card-back p:nth-child(1)').textContent = currentCard.back[0];
-                document.querySelector('.card-back p:nth-child(2)').textContent = currentCard.back[1];
+                document.querySelector('.card-front p:nth-child(1)').textContent = currentCard.front;
+                document.querySelector('.card-front p:nth-child(2)').textContent = "";
             } else {
-                document.querySelector('.card-front p').textContent = currentCard.back[0] + " " + currentCard.back[1];
-                document.querySelector('.card-back p:nth-child(1)').textContent = currentCard.front;
-                document.querySelector('.card-back p:nth-child(2)').textContent = "";
+                document.querySelector('.card-front p:nth-child(1)').textContent = currentCard.back[0] + " " + currentCard.back[1];
+                document.querySelector('.card-front p:nth-child(2)').textContent = currentCard.sentence;
             }
         }
 
@@ -319,7 +324,7 @@
         }
 
         function removeTones(word) {
-            return word.replace(/[āáǎàēéěèīíǐìōóǒòūúǔùü]/g, match => {
+            return word.replace(/[āáǎàēéěèīíǐìōóǒòūúǔùüǚ]/g, match => {
                 switch (match) {
                     case 'ā': return 'a';
                     case 'á': return 'a';
@@ -342,6 +347,7 @@
                     case 'ǔ': return 'u';
                     case 'ù': return 'u';
                     case 'ü': return 'u';
+                    case 'ǚ': return 'u';
                     default: return match;
                 }
             });
@@ -360,7 +366,6 @@
         function checkAnswer() {
             const currentCard = remainingFlashcards[currentCardIndex];
             const currentCardAnswer = normalizeText(currentCard.back[0]);
-
             const userInput = normalizeText(inputField.value);
 
             resetColorsAndFeedback();
